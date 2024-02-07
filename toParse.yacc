@@ -18,7 +18,7 @@ prog:   stmts
 
 stmts:  stmt | stmt stmts
 
-stmt:   VAR ASSIGN expression SEMI
+stmt:   VAR ASSIGN expression QM
 	|OBRACE stmts CBRACE 
         | SEMI
 
