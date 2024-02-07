@@ -1,8 +1,9 @@
 %{
-// Brunet, Matthew
 #include <stdio.h>
 #include<string.h>
 extern int yylex();
+int lineCount = 0;
+int numVal;
 %}
 
 
@@ -16,9 +17,6 @@ prog:   stmts
 stmts:  stmt | stmt stmts
 
 stmt:   VAR ASSIGN expression SEMI
-	|IF OPAREN relEx CPAREN stmts
-	|IF OPAREN relEx CPAREN stmts ELSE stmts
-	|WHILE OPAREN relEX  CPAREN stmts
 	|OBRACE stmts CBRACE 
         | SEMI
 
@@ -33,7 +31,6 @@ factor:  OPAREN expression CPAREN
 	| NUM
 	| VAR 
 
-relEx: 
 
 
 %%

@@ -1,9 +1,9 @@
 %{
-/* Matthew Brunet,
 #include <stdio.h>
 #include <string.h>
 #include<stdlib.h>
 #include "y.tab.h"
+extern int lineCount; 
 extern int numVal;
 %}
 
