@@ -36,7 +36,8 @@ extern int numVal;
 ";"                     return SEMI;
 "*"                     return MUL;
 "/"                     return DIV;
-
+"?"                     return QM;
+"^"                     return EXPON;
 " "                     ;
 "\t"                    ;
 "\n"                    {lineCount++;}

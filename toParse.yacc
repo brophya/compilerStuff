@@ -2,14 +2,16 @@
 #include <stdio.h>
 #include<string.h>
 extern int yylex();
+void yyerror(char*);
 int lineCount = 0;
 int numVal;
+
 %}
 
 
 %token DO WHILE ENDWHILE IF ENDIF THEN ELSE VAR NUM LT GT LE
 %token GE ASSIGN EQ NEQ PLUS MINUS MUL DIV SEMI JUNK RETURN GOTO LABEL
-%token OPAREN CPAREN OBRACE CBRACE
+%token OPAREN CPAREN OBRACE CBRACE QM EXPON
 %%
 
 prog:   stmts
