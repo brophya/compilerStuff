@@ -20,7 +20,7 @@ stmts:  stmt | stmt stmts
 
 stmt:   VAR ASSIGN expression QM
 	|OBRACE stmts CBRACE 
-        | SEMI
+        | QM
 
 
 
