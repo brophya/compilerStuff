@@ -17,13 +17,15 @@ extern int numVal;
 "then"                  return THEN;
 "else"                  return ELSE;
 "goto"			return GOTO;
+"int"                   return INT;
+"char"                  return CHAR;
 [a-zA-Z]+[a-zA-Z0-9]*:  return LABEL;
 [a-zA-Z]+[a-zA-Z0-9]*   return VAR;
 [0-9]+[0-9]*            {numVal = atoi(yytext); return NUM;}
 "{"			return OBRACE;
 "}"			return CBRACE;
 "("			return OPAREN;
-")"                     return CPAREN;
+")"                     return CPAREN;                  
 "<"                     return LT;
 ">"                     return GT;
 "<="                    return LE;
@@ -37,7 +39,6 @@ extern int numVal;
 "*"                     return MUL;
 "/"                     return DIV;
 "?"                     return QM;
-"^"                     return EXPON;
 " "                     ;
 "\t"                    ;
 "\n"                    {lineCount++;}
@@ -45,3 +46,4 @@ extern int numVal;
 .                       return JUNK;
 
 %%
+

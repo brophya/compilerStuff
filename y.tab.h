@@ -79,7 +79,8 @@ extern int yydebug;
     OBRACE = 285,
     CBRACE = 286,
     QM = 287,
-    EXPON = 288
+    INT = 288,
+    CHAR = 289
   };
 #endif
 /* Tokens.  */
@@ -113,7 +114,8 @@ extern int yydebug;
 #define OBRACE 285
 #define CBRACE 286
 #define QM 287
-#define EXPON 288
+#define INT 288
+#define CHAR 289
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
