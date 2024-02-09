@@ -21,7 +21,7 @@ stmts:  stmt | stmt stmts
 stmt:   assignment QM
         | declaration QM
         | gotoStatement QM
-        | labeledStatement QM    
+        | labeledStatement    
 	|OBRACE stmts CBRACE 
         | QM
 
