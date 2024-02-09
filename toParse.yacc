@@ -9,8 +9,8 @@ int numVal;
 %}
 
 
-%token DO WHILE ENDWHILE IF ENDIF THEN ELSE VAR NUM LT GT LE
-%token GE ASSIGN EQ NEQ PLUS MINUS MUL DIV SEMI JUNK RETURN GOTO LABEL
+%token DO WHILE ENDWHILE IF ENDIF THEN ELSE ID NUM LT GT LE
+%token GE ASSIGN EQ NEQ PLUS MINUS MUL DIV SEMI JUNK RETURN GOTO COLON
 %token OPAREN CPAREN OBRACE CBRACE QM INT CHAR
 %%
 
@@ -19,14 +19,20 @@ prog:   stmts
 stmts:  stmt | stmt stmts
 
 stmt:   assignment QM
-        | declaration QM 
+        | declaration QM
+        | gotoStatement QM
+        | labeledStatement QM    
 	|OBRACE stmts CBRACE 
         | QM
 
-assignment: VAR ASSIGN expression
+assignment: ID ASSIGN expression
             | declaration ASSIGN expression
 
-declaration: type VAR 
+declaration: type ID 
+
+gotoStatement: GOTO ID
+
+labeledStatement: ID COLON stmt
 
 expression : expression PLUS term | expression MINUS term
              | term
@@ -35,7 +41,7 @@ term:      term MUL factor | term DIV factor | factor
 
 factor:  OPAREN expression CPAREN 
 	| NUM
-	| VAR 
+	| ID 
 
 type:  INT 
         | CHAR 

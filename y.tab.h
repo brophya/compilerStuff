@@ -56,7 +56,7 @@ extern int yydebug;
     ENDIF = 262,
     THEN = 263,
     ELSE = 264,
-    VAR = 265,
+    ID = 265,
     NUM = 266,
     LT = 267,
     GT = 268,
@@ -73,7 +73,7 @@ extern int yydebug;
     JUNK = 279,
     RETURN = 280,
     GOTO = 281,
-    LABEL = 282,
+    COLON = 282,
     OPAREN = 283,
     CPAREN = 284,
     OBRACE = 285,
@@ -91,7 +91,7 @@ extern int yydebug;
 #define ENDIF 262
 #define THEN 263
 #define ELSE 264
-#define VAR 265
+#define ID 265
 #define NUM 266
 #define LT 267
 #define GT 268
@@ -108,7 +108,7 @@ extern int yydebug;
 #define JUNK 279
 #define RETURN 280
 #define GOTO 281
-#define LABEL 282
+#define COLON 282
 #define OPAREN 283
 #define CPAREN 284
 #define OBRACE 285
