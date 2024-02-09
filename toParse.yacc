@@ -45,7 +45,12 @@ factor:  OPAREN expression CPAREN
 
 type:  INT 
         | CHAR 
-  
+
+condition: 
+
+if:	IF OPAREN condition CPAREN OBRACE stmts CBRACE
+
+
 %%
 int main(){
         yyparse();
