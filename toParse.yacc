@@ -24,6 +24,8 @@ stmt:   assignment QM
         | labeledStatement    
 	|OBRACE stmts CBRACE 
         | QM
+	| matchedIf
+	| openIf
 
 assignment: ID ASSIGN expression
             | declaration ASSIGN expression
@@ -46,9 +48,15 @@ factor:  OPAREN expression CPAREN
 type:  INT 
         | CHAR 
 
-condition: 
+condition: factor op factor
 
-if:	IF OPAREN condition CPAREN OBRACE stmts CBRACE
+op:	LT | GT | LE | GE | EQ | NEQ
+
+matchedIf: IF OPAREN condition CPAREN OBRACE matchedIf CBRACE ELSE OBRACE matchedIf CBRACE
+	| stmts
+
+openIf:	IF OPAREN condition CPAREN OBRACE stmts CBRACE
+	| IF OPAREN condition CPAREN OBRACE matchedIf CBRACE ELSE OBRACE openIf CBRACE
 
 
 %%
