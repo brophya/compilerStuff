@@ -11,7 +11,7 @@ int numVal;
 
 %token DO WHILE ENDWHILE IF ENDIF THEN ELSE ID NUM LT GT LE
 %token GE ASSIGN EQ NEQ PLUS MINUS MUL DIV SEMI JUNK RETURN GOTO COLON
-%token OPAREN CPAREN OBRACE CBRACE QM INT CHAR
+%token OPAREN CPAREN OBRACE CBRACE QM INT CHAR FOR COMMA
 %%
 
 prog:   stmts
@@ -26,6 +26,8 @@ stmt:   assignment QM
         | QM
 	| ifElse
 	| if
+        | whileStatement 
+        | forStatement
 
 assignment: ID ASSIGN expression
             | declaration ASSIGN expression
@@ -55,6 +57,10 @@ op:	LT | GT | LE | GE | EQ | NEQ
 ifElse: IF OPAREN condition CPAREN OBRACE stmts CBRACE ELSE OBRACE stmts CBRACE
 
 if:	IF OPAREN condition CPAREN OBRACE stmts CBRACE
+
+whileStatement: WHILE OPAREN condition CPAREN OBRACE stmts CBRACE  
+
+forStatement: FOR OPAREN assignment QM condition QM assignment CPAREN OBRACE stmts CBRACE 
 
 
 %%

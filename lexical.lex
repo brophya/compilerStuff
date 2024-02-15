@@ -19,6 +19,8 @@ extern int numVal;
 "goto"			return GOTO;
 "int"                   return INT;
 "char"                  return CHAR;
+"for"                   return FOR;
+","                     return COMMA; 
 ":"                     return COLON; 
 [a-zA-Z]+[a-zA-Z0-9]*   return ID;
 [0-9]+[0-9]*            {numVal = atoi(yytext); return NUM;}
