@@ -7,7 +7,7 @@ compile: y.tab.c lex.yy.c
 clean:
 	rm -f compile 
 	rm -f *.o
+	rm -f y.tab.c
+	rm -f y.tab.h
+	rm -f lex.yy.c
 
-cleanwin:
-	del -f compile.exe
-	del -f *.o
