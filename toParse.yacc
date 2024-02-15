@@ -24,8 +24,8 @@ stmt:   assignment QM
         | labeledStatement    
 	|OBRACE stmts CBRACE 
         | QM
-	| matchedIf
-	| openIf
+	| ifElse
+	| if
 
 assignment: ID ASSIGN expression
             | declaration ASSIGN expression
@@ -52,11 +52,9 @@ condition: factor op factor
 
 op:	LT | GT | LE | GE | EQ | NEQ
 
-matchedIf: IF OPAREN condition CPAREN OBRACE matchedIf CBRACE ELSE OBRACE matchedIf CBRACE
-	| stmts
+ifElse: IF OPAREN condition CPAREN OBRACE stmts CBRACE ELSE OBRACE stmts CBRACE
 
-openIf:	IF OPAREN condition CPAREN OBRACE stmts CBRACE
-	| IF OPAREN condition CPAREN OBRACE matchedIf CBRACE ELSE OBRACE openIf CBRACE
+if:	IF OPAREN condition CPAREN OBRACE stmts CBRACE
 
 
 %%
