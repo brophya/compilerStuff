@@ -48,7 +48,7 @@ factor:  OPAREN expression CPAREN
 type:  INT 
         | CHAR 
 
-condition: factor op factor
+condition: expression op expression
 
 op:	LT | GT | LE | GE | EQ | NEQ
 
