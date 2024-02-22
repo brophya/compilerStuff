@@ -5,7 +5,7 @@ extern int yylex();
 void yyerror(char*);
 int lineCount = 0;
 int numVal;
-
+int reg = 1;
 %}
 
 
@@ -29,7 +29,7 @@ stmt:   assignment QM
         | whileStatement 
         | forStatement
 
-assignment: ID ASSIGN expression
+assignment: ID ASSIGN expression	{printf("	MOV R%d, %d\n",reg,numVal);}
             | declaration ASSIGN expression
 
 declaration: type ID 
