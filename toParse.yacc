@@ -31,8 +31,8 @@ stmt:   assignment QM
         | whileStatement 
         | forStatement
 
-assignment: ID ASSIGN expression	    {printf("MOV R%d, %d\n",reg,numVal);}
-            | declaration ASSIGN expression
+assignment: ID ASSIGN expression	    {printf("MOV R%d, %d\n",reg++,numVal);}
+            | declaration ASSIGN expression {printf("MOV R%d, %d\n", reg++,numVal);}
 
 declaration: type ID 
 
