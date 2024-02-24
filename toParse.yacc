@@ -1,5 +1,5 @@
 %{	
-#include "hashtable.h"
+#include "symbolTable.h"
 #include <stdio.h>
 #include<string.h>
 extern int yylex();
@@ -7,6 +7,7 @@ void yyerror(char*);
 int lineCount = 0;
 int numVal;
 int reg = 1;
+char* identifier;
 %}
 
 

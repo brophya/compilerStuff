@@ -5,7 +5,7 @@
 #include "y.tab.h"
 extern int lineCount; 
 extern int numVal;
-
+extern char* identifier; 
 %}
 
 %%
@@ -23,7 +23,7 @@ extern int numVal;
 "for"                   return FOR;
 ","                     return COMMA; 
 ":"                     return COLON; 
-[a-zA-Z]+[a-zA-Z0-9]*   return ID;
+[a-zA-Z]+[a-zA-Z0-9]*   {identifier = yytext; return ID;}
 [0-9]+[0-9]*            {numVal = atoi(yytext); return NUM;}
 "{"			return OBRACE;
 "}"			return CBRACE;
