@@ -5,6 +5,7 @@
 #include "y.tab.h"
 extern int lineCount; 
 extern int numVal;
+
 %}
 
 %%

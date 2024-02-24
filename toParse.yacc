@@ -1,4 +1,5 @@
-%{
+%{	
+#include "hashtable.h"
 #include <stdio.h>
 #include<string.h>
 extern int yylex();
@@ -29,7 +30,7 @@ stmt:   assignment QM
         | whileStatement 
         | forStatement
 
-assignment: ID ASSIGN expression	{printf("	MOV R%d, %d\n",reg,numVal);}
+assignment: ID ASSIGN expression	    {printf("MOV R%d, %d\n",reg,numVal);}
             | declaration ASSIGN expression
 
 declaration: type ID 
