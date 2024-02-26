@@ -20,7 +20,7 @@ prog:   stmts
 
 stmts:  stmt | stmt stmts
 
-stmt:   assignment QM
+stmt:   assignment QM 	{printf("MOV %s, R%d\n",identifier,reg-1);}
         | declaration QM
         | gotoStatement QM
         | labeledStatement    
