@@ -8,6 +8,7 @@ int lineCount = 0;
 int numVal;
 int reg = 1;
 char* identifier;
+char* varType;
 %}
 
 
@@ -34,7 +35,7 @@ stmt:   assignment QM    {printf("MOV %s, R%d\n",identifier,reg-1);}
 assignment: ID ASSIGN expression	    {printf("MOV R%d, %d\n",reg++,numVal);}
             | declaration ASSIGN expression {printf("MOV R%d, %d\n", reg++,numVal);}
 
-declaration: type ID 
+declaration: type ID {install(identifier, varType); printf("INSTALLED     NAME: %s  TYPE: %s\n", lookUp(identifier)->name, lookUp(identifier)->type); } 
 
 gotoStatement: GOTO ID
 

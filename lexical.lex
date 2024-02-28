@@ -6,6 +6,7 @@
 extern int lineCount; 
 extern int numVal;
 extern char* identifier; 
+extern char* varType;
 %}
 
 %%
@@ -18,8 +19,8 @@ extern char* identifier;
 "then"                  return THEN;
 "else"                  return ELSE;
 "goto"			return GOTO;
-"int"                   return INT;
-"char"                  return CHAR;
+"int"                   {varType = "int"; return INT;}
+"char"                  {varType = "char"; return CHAR;}
 "for"                   return FOR;
 ","                     return COMMA; 
 ":"                     return COLON; 

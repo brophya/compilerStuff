@@ -77,8 +77,9 @@ int lineCount = 0;
 int numVal;
 int reg = 1;
 char* identifier;
+char* varType;
 
-#line 82 "y.tab.c"
+#line 83 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -578,11 +579,11 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    19,    19,    21,    21,    23,    24,    25,    26,    27,
-      28,    29,    30,    31,    32,    34,    35,    37,    39,    41,
-      43,    43,    44,    46,    46,    46,    48,    49,    50,    52,
-      53,    55,    57,    57,    57,    57,    57,    57,    59,    61,
-      63,    65
+       0,    20,    20,    22,    22,    24,    25,    26,    27,    28,
+      29,    30,    31,    32,    33,    35,    36,    38,    40,    42,
+      44,    44,    45,    47,    47,    47,    49,    50,    51,    53,
+      54,    56,    58,    58,    58,    58,    58,    58,    60,    62,
+      64,    66
 };
 #endif
 
@@ -1426,25 +1427,31 @@ yyreduce:
   switch (yyn)
     {
   case 5:
-#line 23 "toParse.yacc"
+#line 24 "toParse.yacc"
                          {printf("MOV %s, R%d\n",identifier,reg-1);}
-#line 1432 "y.tab.c"
+#line 1433 "y.tab.c"
     break;
 
   case 15:
-#line 34 "toParse.yacc"
+#line 35 "toParse.yacc"
                                             {printf("MOV R%d, %d\n",reg++,numVal);}
-#line 1438 "y.tab.c"
+#line 1439 "y.tab.c"
     break;
 
   case 16:
-#line 35 "toParse.yacc"
+#line 36 "toParse.yacc"
                                             {printf("MOV R%d, %d\n", reg++,numVal);}
-#line 1444 "y.tab.c"
+#line 1445 "y.tab.c"
+    break;
+
+  case 17:
+#line 38 "toParse.yacc"
+                     {install(identifier, varType); printf("INSTALLED     NAME: %s  TYPE: %s\n", lookUp(identifier)->name, lookUp(identifier)->type); }
+#line 1451 "y.tab.c"
     break;
 
 
-#line 1448 "y.tab.c"
+#line 1455 "y.tab.c"
 
       default: break;
     }
@@ -1676,7 +1683,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 68 "toParse.yacc"
+#line 69 "toParse.yacc"
 
 int main(){
         yyparse();
