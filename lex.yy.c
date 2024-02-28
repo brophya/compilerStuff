@@ -852,7 +852,7 @@ return SGQT;
 case 15:
 YY_RULE_SETUP
 #line 27 "lexical.lex"
-{identifier = yytext; return ID;}
+{identifier = strdup( yytext); return ID;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP

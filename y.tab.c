@@ -1427,7 +1427,7 @@ yyreduce:
     {
   case 5:
 #line 23 "toParse.yacc"
-                        {printf("MOV %s, R%d\n",identifier,reg-1);}
+                         {printf("MOV %s, R%d\n",identifier,reg-1);}
 #line 1432 "y.tab.c"
     break;
 

@@ -24,7 +24,7 @@ extern char* identifier;
 ","                     return COMMA; 
 ":"                     return COLON; 
 "'"                     return SGQT;
-[a-zA-Z]+[a-zA-Z0-9]*   {identifier = yytext; return ID;}
+[a-zA-Z]+[a-zA-Z0-9]*   {identifier = strdup( yytext); return ID;}
 [0-9]+[0-9]*            {numVal = atoi(yytext); return NUM;}
 "{"			return OBRACE;
 "}"			return CBRACE;
