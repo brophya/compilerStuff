@@ -78,8 +78,9 @@ int numVal;
 int reg = 1;
 char* identifier;
 char* varType;
+int tempVal;
 
-#line 83 "y.tab.c"
+#line 84 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -579,11 +580,11 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    20,    20,    22,    22,    24,    25,    26,    27,    28,
-      29,    30,    31,    32,    33,    35,    36,    38,    40,    42,
-      44,    44,    45,    47,    47,    47,    49,    50,    51,    53,
-      54,    56,    58,    58,    58,    58,    58,    58,    60,    62,
-      64,    66
+       0,    21,    21,    23,    23,    25,    26,    27,    28,    29,
+      30,    31,    32,    33,    34,    36,    37,    39,    41,    43,
+      45,    46,    47,    49,    50,    51,    53,    54,    55,    57,
+      58,    60,    62,    62,    62,    62,    62,    62,    64,    66,
+      68,    70
 };
 #endif
 
@@ -1427,31 +1428,79 @@ yyreduce:
   switch (yyn)
     {
   case 5:
-#line 24 "toParse.yacc"
+#line 25 "toParse.yacc"
                          {printf("MOV %s, R%d\n",identifier,reg-1);}
-#line 1433 "y.tab.c"
+#line 1434 "y.tab.c"
     break;
 
   case 15:
-#line 35 "toParse.yacc"
-                                            {printf("MOV R%d, %d\n",reg++,numVal);}
-#line 1439 "y.tab.c"
+#line 36 "toParse.yacc"
+                                            { printf("MOV R%d, %d\n",reg++, yyvsp[0]);}
+#line 1440 "y.tab.c"
     break;
 
   case 16:
-#line 36 "toParse.yacc"
-                                            {printf("MOV R%d, %d\n", reg++,numVal);}
-#line 1445 "y.tab.c"
+#line 37 "toParse.yacc"
+                                            { printf("MOV R%d, %d\n", reg++,yyvsp[0]);}
+#line 1446 "y.tab.c"
     break;
 
   case 17:
-#line 38 "toParse.yacc"
+#line 39 "toParse.yacc"
                      {install(identifier, varType); printf("INSTALLED     NAME: %s  TYPE: %s\n", lookUp(identifier)->name, lookUp(identifier)->type); }
-#line 1451 "y.tab.c"
+#line 1452 "y.tab.c"
+    break;
+
+  case 20:
+#line 45 "toParse.yacc"
+                                  { yyval = yyvsp[-2] + yyvsp[0]; }
+#line 1458 "y.tab.c"
+    break;
+
+  case 21:
+#line 46 "toParse.yacc"
+                                     { yyval = yyvsp[-2] - yyvsp[0]; }
+#line 1464 "y.tab.c"
+    break;
+
+  case 22:
+#line 47 "toParse.yacc"
+                    {yyval = yyvsp[0];}
+#line 1470 "y.tab.c"
+    break;
+
+  case 23:
+#line 49 "toParse.yacc"
+                           {yyval = yyvsp[-2] * yyvsp[0];}
+#line 1476 "y.tab.c"
+    break;
+
+  case 24:
+#line 50 "toParse.yacc"
+                             {yyval = yyvsp[-2] / yyvsp[0];}
+#line 1482 "y.tab.c"
+    break;
+
+  case 25:
+#line 51 "toParse.yacc"
+                    {yyval = yyvsp[0];}
+#line 1488 "y.tab.c"
+    break;
+
+  case 26:
+#line 53 "toParse.yacc"
+                                  {yyval = yyvsp[-1];}
+#line 1494 "y.tab.c"
+    break;
+
+  case 27:
+#line 54 "toParse.yacc"
+                {yyval = numVal; printf("%d\n", yyval);}
+#line 1500 "y.tab.c"
     break;
 
 
-#line 1455 "y.tab.c"
+#line 1504 "y.tab.c"
 
       default: break;
     }
@@ -1683,7 +1732,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 69 "toParse.yacc"
+#line 73 "toParse.yacc"
 
 int main(){
         yyparse();

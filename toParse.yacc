@@ -9,6 +9,7 @@ int numVal;
 int reg = 1;
 char* identifier;
 char* varType;
+int tempVal;
 %}
 
 
@@ -32,8 +33,8 @@ stmt:   assignment QM    {printf("MOV %s, R%d\n",identifier,reg-1);}
         | whileStatement 
         | forStatement
 
-assignment: ID ASSIGN expression	    {printf("MOV R%d, %d\n",reg++,numVal);}
-            | declaration ASSIGN expression {printf("MOV R%d, %d\n", reg++,numVal);}
+assignment: ID ASSIGN expression	    { printf("MOV R%d, %d\n",reg++, $3);}
+            | declaration ASSIGN expression { printf("MOV R%d, %d\n", reg++,$3);}
 
 declaration: type ID {install(identifier, varType); printf("INSTALLED     NAME: %s  TYPE: %s\n", lookUp(identifier)->name, lookUp(identifier)->type); } 
 
@@ -41,13 +42,16 @@ gotoStatement: GOTO ID
 
 labeledStatement: ID COLON stmt
 
-expression : expression PLUS term | expression MINUS term
-             | term
+expression : expression PLUS term { $$ = $1 + $3; }
+             | expression MINUS term { $$ = $1 - $3; }
+             | term {$$ = $1;}
 
-term:      term MUL factor | term DIV factor | factor
+term:      term MUL factor {$$ = $1 * $3;} 
+           | term DIV factor {$$ = $1 / $3;}
+           | factor {$$ = $1;}
 
-factor:  OPAREN expression CPAREN 
-	| NUM
+factor:  OPAREN expression CPAREN {$$ = $2;} 
+	| NUM   {$$ = numVal;}
 	| ID 
 
 type:  INT 
