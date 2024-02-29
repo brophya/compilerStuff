@@ -11,8 +11,11 @@ int reg = 0;
 char* identifier;
 char* varType;
 int tempVal;
-int regVals[32]; //this will be used really only if we have too many operands in an expression
+int regVals[32]; //this will be used really only if we have too many operands in an expressio
+int regPtr = 0;
 char* assignID;
+int operand1; 
+int operand2;
 %}
 
 
@@ -47,17 +50,17 @@ gotoStatement: GOTO ID
 
 labeledStatement: ID COLON stmt
 
-expression : expression PLUS term  {printf("add R%d, R%d, R%d\n", reg++, reg-2, reg - 1);}
-             | expression MINUS term {printf("sub R%d, R%d, R%d\n", reg++, reg-2, reg - 1);}  
+expression : expression PLUS term   {operand2 = regVals[--regPtr]; operand1 = regVals[--regPtr]; regVals[regPtr] = reg++; printf("add R%d, R%d, R%d\n", regVals[regPtr++], operand1, operand2);}
+             | expression MINUS term {operand2 = regVals[--regPtr]; operand1 = regVals[--regPtr]; regVals[regPtr] = reg++; printf("sub R%d, R%d, R%d\n", regVals[regPtr++], operand1, operand2);}
              | term
 
-term:      term MUL factor   {printf("mul R%d, R%d, R%d\n", reg++, reg-2, reg - 1);}
-           | term DIV factor {printf("div R%d, R%d, R%d\n", reg++, reg-2, reg - 1);}
+term:      term MUL factor   {operand2 = regVals[--regPtr]; operand1 = regVals[--regPtr]; regVals[regPtr] = reg++; printf("mul R%d, R%d, R%d\n", regVals[regPtr++], operand1, operand2);}
+           | term DIV factor {operand2 = regVals[--regPtr]; operand1 = regVals[--regPtr]; regVals[regPtr] = reg++; printf("div R%d, R%d, R%d\n", regVals[regPtr++], operand1, operand2);}
            | factor 
 
 factor:  OPAREN expression CPAREN   
-	| NUM  {printf("li R%d, %d\n", reg++, numVal);}  
-	| ID   {printf("lw R%d, %s\n", reg++, identifier);} 
+	| NUM  {printf("li R%d, %d\n", reg, numVal); regVals[regPtr++] = reg++; }  
+	| ID   {printf("lw R%d, %s\n", reg, identifier); regVals[regPtr++] = reg++; } 
 
 type:  INT      {varType = "int" ;} 
         | CHAR  {varType = "char" ;}
