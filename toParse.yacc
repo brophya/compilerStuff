@@ -51,8 +51,8 @@ expression : expression PLUS term  {printf("add R%d, R%d, R%d\n", reg++, reg-2, 
              | expression MINUS term {printf("sub R%d, R%d, R%d\n", reg++, reg-2, reg - 1);}  
              | term
 
-term:      term MUL factor 
-           | term DIV factor 
+term:      term MUL factor  {printf("mul R%d, R%d, R%d\n", reg++, reg-2, reg - 1);}
+           | term DIV factor {printf("div R%d, R%d, R%d\n", reg++, reg-2, reg - 1);}
            | factor 
 
 factor:  OPAREN expression CPAREN   
