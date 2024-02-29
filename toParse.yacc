@@ -39,8 +39,8 @@ stmt:   assignment QM
         | whileStatement 
         | forStatement
 
-assignment: varID ASSIGN expression	    { printf("sw %s, $%d\n", assignID, reg-1 );}
-            | declaration ASSIGN expression { printf("sw %s, $%d\n", assignID, reg-1);}
+assignment: varID ASSIGN expression	    { printf("sw $%d, %s\n", reg-1, assignID);}
+            | declaration ASSIGN expression { printf("sw $%d, %s\n", reg-1, assignID);}
 
 varID: ID {assignID = strdup(identifier); }
 
