@@ -5,11 +5,14 @@
 extern int yylex();
 void yyerror(char*);
 int lineCount = 0;
+extern char* yytext;
 int numVal;
-int reg = 1;
+int reg = 0;
 char* identifier;
 char* varType;
 int tempVal;
+int regVals[32]; //this will be used really only if we have too many operands in an expression
+char* assignID;
 %}
 
 
@@ -22,7 +25,7 @@ prog:   stmts
 
 stmts:  stmt | stmt stmts
 
-stmt:   assignment QM    {printf("MOV %s, R%d\n",identifier,reg-1);}
+stmt:   assignment QM   
         | declaration QM
         | gotoStatement QM
         | labeledStatement    
@@ -33,29 +36,31 @@ stmt:   assignment QM    {printf("MOV %s, R%d\n",identifier,reg-1);}
         | whileStatement 
         | forStatement
 
-assignment: ID ASSIGN expression	    { printf("MOV R%d, %d\n",reg++, $3);}
-            | declaration ASSIGN expression { printf("MOV R%d, %d\n", reg++,$3);}
+assignment: varID ASSIGN expression	    { printf("sw %s, R%d\n", assignID, reg-1 );}
+            | declaration ASSIGN expression { printf("sw %s, R%d\n", assignID, reg-1);}
 
-declaration: type ID {install(identifier, varType); printf("INSTALLED     NAME: %s  TYPE: %s\n", lookUp(identifier)->name, lookUp(identifier)->type); } 
+varID: ID {assignID = strdup(identifier); }
 
+declaration: type varID {install(identifier, varType); printf("INSTALLED   NAME: %s  TYPE: %s\n", lookUp(identifier)->name, lookUp(identifier)->type);} 
+ 
 gotoStatement: GOTO ID
 
 labeledStatement: ID COLON stmt
 
-expression : expression PLUS term { $$ = $1 + $3; }
-             | expression MINUS term { $$ = $1 - $3; }
-             | term {$$ = $1;}
+expression : expression PLUS term  {printf("add R%d, R%d, R%d\n", reg++, reg-2, reg - 1);}
+             | expression MINUS term {printf("sub R%d, R%d, R%d\n", reg++, reg-2, reg - 1);}  
+             | term
 
-term:      term MUL factor {$$ = $1 * $3;} 
-           | term DIV factor {$$ = $1 / $3;}
-           | factor {$$ = $1;}
+term:      term MUL factor 
+           | term DIV factor 
+           | factor 
 
-factor:  OPAREN expression CPAREN {$$ = $2;} 
-	| NUM   {$$ = numVal;}
-	| ID 
+factor:  OPAREN expression CPAREN   
+	| NUM  {printf("li R%d, %d\n", reg++, numVal);}  
+	| ID   {printf("lw R%d, %s\n", reg++, identifier);} 
 
-type:  INT 
-        | CHAR 
+type:  INT      {varType = "int" ;} 
+        | CHAR  {varType = "char" ;}
 
 condition: expression op expression
 
