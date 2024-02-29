@@ -7,7 +7,7 @@ void yyerror(char*);
 int lineCount = 0;
 extern char* yytext;
 int numVal;
-int reg = 0;
+int reg = 8;
 char* identifier;
 char* varType;
 int tempVal;
@@ -39,8 +39,8 @@ stmt:   assignment QM
         | whileStatement 
         | forStatement
 
-assignment: varID ASSIGN expression	    { printf("sw %s, R%d\n", assignID, reg-1 );}
-            | declaration ASSIGN expression { printf("sw %s, R%d\n", assignID, reg-1);}
+assignment: varID ASSIGN expression	    { printf("sw %s, $%d\n", assignID, reg-1 );}
+            | declaration ASSIGN expression { printf("sw %s, $%d\n", assignID, reg-1);}
 
 varID: ID {assignID = strdup(identifier); }
 
@@ -50,17 +50,17 @@ gotoStatement: GOTO ID
 
 labeledStatement: ID COLON stmt
 
-expression : expression PLUS term   {operand2 = regVals[--regPtr]; operand1 = regVals[--regPtr]; regVals[regPtr] = reg++; printf("add R%d, R%d, R%d\n", regVals[regPtr++], operand1, operand2);}
-             | expression MINUS term {operand2 = regVals[--regPtr]; operand1 = regVals[--regPtr]; regVals[regPtr] = reg++; printf("sub R%d, R%d, R%d\n", regVals[regPtr++], operand1, operand2);}
+expression : expression PLUS term   {operand2 = regVals[--regPtr]; operand1 = regVals[--regPtr]; regVals[regPtr] = reg++; printf("add $%d, $%d, $%d\n", regVals[regPtr++], operand1, operand2);}
+             | expression MINUS term {operand2 = regVals[--regPtr]; operand1 = regVals[--regPtr]; regVals[regPtr] = reg++; printf("sub $%d, $%d, $%d\n", regVals[regPtr++], operand1, operand2);}
              | term
 
-term:      term MUL factor   {operand2 = regVals[--regPtr]; operand1 = regVals[--regPtr]; regVals[regPtr] = reg++; printf("mul R%d, R%d, R%d\n", regVals[regPtr++], operand1, operand2);}
-           | term DIV factor {operand2 = regVals[--regPtr]; operand1 = regVals[--regPtr]; regVals[regPtr] = reg++; printf("div R%d, R%d, R%d\n", regVals[regPtr++], operand1, operand2);}
+term:      term MUL factor   {operand2 = regVals[--regPtr]; operand1 = regVals[--regPtr]; regVals[regPtr] = reg++; printf("mul $%d, $%d, $%d\n", regVals[regPtr++], operand1, operand2);}
+           | term DIV factor {operand2 = regVals[--regPtr]; operand1 = regVals[--regPtr]; regVals[regPtr] = reg++; printf("div $%d, $%d, $%d\n", regVals[regPtr++], operand1, operand2);}
            | factor 
 
 factor:  OPAREN expression CPAREN   
-	| NUM  {printf("li R%d, %d\n", reg, numVal); regVals[regPtr++] = reg++; }  
-	| ID   {printf("lw R%d, %s\n", reg, identifier); regVals[regPtr++] = reg++; } 
+	| NUM  {printf("li $%d, %d\n", reg, numVal); regVals[regPtr++] = reg++; }  
+	| ID   {printf("lw $%d, %s\n", reg, identifier); regVals[regPtr++] = reg++; } 
 
 type:  INT      {varType = "int" ;} 
         | CHAR  {varType = "char" ;}
