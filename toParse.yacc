@@ -51,7 +51,7 @@ expression : expression PLUS term  {printf("add R%d, R%d, R%d\n", reg++, reg-2, 
              | expression MINUS term {printf("sub R%d, R%d, R%d\n", reg++, reg-2, reg - 1);}  
              | term
 
-term:      term MUL factor  {printf("mult R%d, R%d\n", reg-2, reg-1);printf("mflo R%d\n",reg++);}
+term:      term MUL factor   {printf("mul R%d, R%d, R%d\n", reg++, reg-2, reg - 1);}
            | term DIV factor {printf("div R%d, R%d, R%d\n", reg++, reg-2, reg - 1);}
            | factor 
 
