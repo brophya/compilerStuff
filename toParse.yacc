@@ -16,6 +16,7 @@ int regPtr = 0;
 char* assignID;
 int operand1; 
 int operand2;
+int whileCount = 0;
 %}
 
 
@@ -65,15 +66,22 @@ factor:  OPAREN expression CPAREN
 type:  INT      {varType = "int" ;} 
         | CHAR  {varType = "char" ;}
 
-condition: expression op expression
+condition: expression op expression {operand2 = regVals[regPtr - 1]; operand1 = regVals[regPtr - 2]; printf("$%d, $%d, endWhile%d\n",operand1, operand2, --whileCount);}
 
-op:	LT | GT | LE | GE | EQ | NEQ
+op:	LT      {printf("bge ");} 
+        | GT    {printf("ble ");}
+        | LE    {printf("bgt ");}
+        | GE    {printf("blt ");}
+        | EQ    {printf("bne ");}
+        | NEQ   {printf("beq ");}
 
 ifElse: IF OPAREN condition CPAREN OBRACE stmts CBRACE ELSE OBRACE stmts CBRACE
 
 if:	IF OPAREN condition CPAREN OBRACE stmts CBRACE
 
-whileStatement: WHILE OPAREN condition CPAREN OBRACE stmts CBRACE  
+whileStatement: while OPAREN condition CPAREN OBRACE stmts CBRACE  {printf("jmp while%d\n endWhile%d:  \n", whileCount, whileCount);}
+
+while: WHILE {printf("while%d:  ", whileCount++);}  
 
 forStatement: FOR OPAREN assignment QM condition QM assignment CPAREN OBRACE stmts CBRACE 
 
