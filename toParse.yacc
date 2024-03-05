@@ -81,7 +81,7 @@ op:	LT      {compOp = "bge";}
 
 ifElse: IF OPAREN condition CPAREN OBRACE stmts CBRACE ELSE OBRACE stmts CBRACE
 
-if:	IF OPAREN condition CPAREN OBRACE stmts CBRACE
+if:	IF OPAREN condition CPAREN OBRACE stmts CBRACE {printf("endLabel%d: \n",labelStack[labelPtr-1]);labelStack[labelPtr++] = ++labelCount;}
 
 whileStatement: while OPAREN condition CPAREN OBRACE stmts CBRACE  {labelPtr--; printf("j label%d\n endLabel%d:  \n", labelStack[labelPtr], labelStack[labelPtr]);}
 

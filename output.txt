@@ -1,0 +1,18 @@
+li $8, 1
+sw $8, a
+li $9, 2
+sw $9, b
+lw $10, a
+lw $11, b
+bge $10, $11, endLabel0
+li $12, 3
+sw $12, a
+endLabel0: 
+lw $13, a
+lw $14, b
+bge $13, $14, endLabel1
+li $15, 0
+sw $15, a
+endLabel1: 
+
+syntax error on line 8
