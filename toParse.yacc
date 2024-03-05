@@ -17,6 +17,7 @@ char* assignID;
 int operand1; 
 int operand2;
 int whileCount = 0;
+char* compOp;
 %}
 
 
@@ -66,22 +67,22 @@ factor:  OPAREN expression CPAREN
 type:  INT      {varType = "int" ;} 
         | CHAR  {varType = "char" ;}
 
-condition: expression op expression {operand2 = regVals[regPtr - 1]; operand1 = regVals[regPtr - 2]; printf("$%d, $%d, endWhile%d\n",operand1, operand2, --whileCount);}
+condition: expression op expression {operand2 = regVals[regPtr - 1]; operand1 = regVals[regPtr - 2]; printf("%s $%d, $%d, endWhile%d\n",compOp, operand1, operand2, --whileCount);}
 
-op:	LT      {printf("bge ");} 
-        | GT    {printf("ble ");}
-        | LE    {printf("bgt ");}
-        | GE    {printf("blt ");}
-        | EQ    {printf("bne ");}
-        | NEQ   {printf("beq ");}
+op:	LT      {compOp = "bgt";} 
+        | GT    {compOp = "ble";}
+        | LE    {compOp = "bgt";}
+        | GE    {compOp = "blt";}
+        | EQ    {compOp = "bne";}
+        | NEQ   {compOp = "beq";}
 
 ifElse: IF OPAREN condition CPAREN OBRACE stmts CBRACE ELSE OBRACE stmts CBRACE
 
 if:	IF OPAREN condition CPAREN OBRACE stmts CBRACE
 
-whileStatement: while OPAREN condition CPAREN OBRACE stmts CBRACE  {printf("jmp while%d\n endWhile%d:  \n", whileCount, whileCount);}
+whileStatement: while OPAREN condition CPAREN OBRACE stmts CBRACE  {printf("j while%d\n endWhile%d:  \n", whileCount, whileCount);}
 
-while: WHILE {printf("while%d:  ", whileCount++);}  
+while: WHILE {printf("while%d:  \n", whileCount++);}  
 
 forStatement: FOR OPAREN assignment QM condition QM assignment CPAREN OBRACE stmts CBRACE 
 
