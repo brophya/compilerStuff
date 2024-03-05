@@ -16,7 +16,7 @@ int regPtr = 0;
 char* assignID;
 int operand1; 
 int operand2;
-int whileCount = 0;
+int labelCount = 0;
 char* compOp;
 %}
 
@@ -67,8 +67,8 @@ factor:  OPAREN expression CPAREN
 type:  INT      {varType = "int" ;} 
         | CHAR  {varType = "char" ;}
 
-condition: expression op expression {operand2 = regVals[regPtr - 1]; operand1 = regVals[regPtr - 2]; printf("%s $%d, $%d, endWhile%d\n",compOp, operand1, operand2, --whileCount);}
-
+condition: expression op expression {operand2 = regVals[regPtr - 1]; operand1 = regVals[regPtr - 2];}
+ 
 op:	LT      {compOp = "bgt";} 
         | GT    {compOp = "ble";}
         | LE    {compOp = "bgt";}
@@ -80,9 +80,11 @@ ifElse: IF OPAREN condition CPAREN OBRACE stmts CBRACE ELSE OBRACE stmts CBRACE
 
 if:	IF OPAREN condition CPAREN OBRACE stmts CBRACE
 
-whileStatement: while OPAREN condition CPAREN OBRACE stmts CBRACE  {printf("j while%d\n endWhile%d:  \n", whileCount, whileCount);}
+whileStatement: whileCondition OBRACE stmts CBRACE  {printf("j label%d\n endLabel%d:  \n", labelCount, labelCount);}
 
-while: WHILE {printf("while%d:  \n", whileCount++);}  
+whileCondition: WHILE OPAREN condition CPAREN { printf("label%d:  \n", labelCount++);
+                                                printf("%s $%d, $%d, endLabel%d\n",compOp, operand1, operand2, --labelCount);}
+
 
 forStatement: FOR OPAREN assignment QM condition QM assignment CPAREN OBRACE stmts CBRACE 
 
