@@ -10,12 +10,14 @@ int numVal;
 int reg = 8;
 char* identifier;
 char* varType;
+char* assignID;
 int tempVal;
 int regVals[32]; //this will be used really only if we have too many operands in an expressio
 int regPtr = 0;
-char* assignID;
-int operand1, operand2;
-int nestedCount = 0;
+int operand1;
+int operand2;
+int labelStack[50]; 
+int labelPtr = 0; 
 int labelCount = 0;
 char* compOp;
 %}
@@ -67,7 +69,7 @@ factor:  OPAREN expression CPAREN
 type:  INT      {varType = "int" ;} 
         | CHAR  {varType = "char" ;}
 
-condition: expression op expression {operand2 = regVals[regPtr - 1]; operand1 = regVals[regPtr - 2]; printf("%s $%d, $%d, endLabel%d\n",compOp, operand1, operand2, labelCount - 1);}
+condition: expression op expression {operand2 = regVals[regPtr - 1]; operand1 = regVals[regPtr - 2]; printf("%s $%d, $%d, endLabel%d\n",compOp, operand1, operand2, labelStack[labelPtr - 1]);}
 
 op:	LT      {compOp = "bgt";} 
         | GT    {compOp = "ble";}
@@ -80,9 +82,9 @@ ifElse: IF OPAREN condition CPAREN OBRACE stmts CBRACE ELSE OBRACE stmts CBRACE
 
 if:	IF OPAREN condition CPAREN OBRACE stmts CBRACE
 
-whileStatement: while OPAREN condition CPAREN OBRACE stmts CBRACE  {labelCount--; printf("j label%d\n endLabel%d:  \n", labelCount, labelCount);}
+whileStatement: while OPAREN condition CPAREN OBRACE stmts CBRACE  {labelPtr--; printf("j label%d\n endLabel%d:  \n", labelStack[labelPtr], labelStack[labelPtr]);}
 
-while: WHILE {printf("label%d:  \n", labelCount++);}  
+while: WHILE {printf("label%d:  \n", labelCount); labelStack[labelPtr++] = labelCount++;}  
 
 forStatement: FOR OPAREN assignment QM condition QM assignment CPAREN OBRACE stmts CBRACE 
 
