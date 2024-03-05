@@ -11,6 +11,7 @@ int reg = 8;
 char* identifier;
 char* varType;
 char* assignID;
+char* declareID;
 int tempVal;
 int regVals[32]; //this will be used really only if we have too many operands in an expressio
 int regPtr = 0;
@@ -44,11 +45,11 @@ stmt:   assignment QM
         | forStatement
 
 assignment: varID ASSIGN expression	    { printf("sw $%d, %s\n", reg-1, assignID);}
-            | declaration ASSIGN expression { printf("sw $%d, %s\n", reg-1, assignID);}
+            | declaration ASSIGN expression { printf("sw $%d, %s\n", reg-1, declareID);}
 
-varID: ID {assignID = strdup(identifier); }
+varID: ID {assignID = strdup(identifier); if (lookUp(identifier) == NULL) yyerror("use of undeclared variable"); }
 
-declaration: type varID {install(identifier, varType); printf("INSTALLED   NAME: %s  TYPE: %s\n", lookUp(identifier)->name, lookUp(identifier)->type);} 
+declaration: type ID {install(identifier, varType); declareID = strdup(identifier);} 
  
 gotoStatement: GOTO ID
 
@@ -96,4 +97,5 @@ int main(){
 
 void yyerror(char *msg){
         printf("\n%s on line %d\n", msg, lineCount);
+        exit(-1);
 }
