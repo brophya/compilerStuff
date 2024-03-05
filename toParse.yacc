@@ -15,8 +15,8 @@ int regVals[32]; //this will be used really only if we have too many operands in
 int regPtr = 0;
 char* assignID;
 int operand1, operand2;
-int totalLabels = 0;
-int nestCount = 0;
+int nestedCount = 0;
+int labelCount = 0;
 char* compOp;
 %}
 
