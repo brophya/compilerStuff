@@ -72,6 +72,8 @@ type:  INT      {varType = "int" ;}
 
 condition: expression op expression {operand2 = regVals[regPtr - 1]; operand1 = regVals[regPtr - 2]; printf("%s $%d, $%d, endLabel%d\n",compOp, operand1, operand2, labelStack[labelPtr - 1]);}
 
+condition2: expression op expression {operand2 = regVals[regPtr - 1]; operand1 = regVals[regPtr - 2]; printf("%s $%d, $%d, endLabel%d\n",compOp, operand1, operand2, labelStack[labelPtr++] = labelCount++);}
+
 op:	LT      {compOp = "bge";} 
         | GT    {compOp = "ble";}
         | LE    {compOp = "bgt";}
@@ -79,9 +81,11 @@ op:	LT      {compOp = "bge";}
         | EQ    {compOp = "bne";}
         | NEQ   {compOp = "beq";}
 
-ifElse: IF OPAREN condition CPAREN OBRACE stmts CBRACE ELSE OBRACE stmts CBRACE
+if:     IF OPAREN condition2 CPAREN OBRACE stmts CBRACE {printf("endLabel%d: \n",labelStack[labelPtr-1]);}
 
-if:	IF OPAREN condition CPAREN OBRACE stmts CBRACE {printf("endLabel%d: \n",labelStack[labelPtr-1]);labelStack[labelPtr++] = ++labelCount;}
+ifElse: IF OPAREN condition2 CPAREN OBRACE stmts CBRACE else OBRACE stmts CBRACE {printf("endIf%d: \n",labelStack[labelPtr-1]);}
+
+else: ELSE {printf("j endIf%d \n",labelStack[labelPtr-1]); printf("endLabel%d: \n",labelStack[labelPtr-1]);}
 
 whileStatement: while OPAREN condition CPAREN OBRACE stmts CBRACE  {labelPtr--; printf("j label%d\n endLabel%d:  \n", labelStack[labelPtr], labelStack[labelPtr]);}
 
