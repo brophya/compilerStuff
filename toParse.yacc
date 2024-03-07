@@ -89,7 +89,8 @@ ifElse: IF OPAREN condition2 CPAREN OBRACE stmts CBRACE else OBRACE stmts CBRACE
 
 else: ELSE {printf("j endIf%d \n",labelStack[labelPtr-1]); printf("endLabel%d: \n",labelStack[labelPtr-1]);}
 
-whileStatement: while OPAREN condition CPAREN OBRACE stmts CBRACE  {labelPtr--; printf("j label%d\n endLabel%d:  \n", labelStack[labelPtr], labelStack[labelPtr]);}
+whileStatement: while OPAREN condition CPAREN OBRACE stmts CBRACE  {labelPtr--; 
+                                                 printf("j label%d\n endLabel%d:  \n", labelStack[labelPtr], labelStack[labelPtr]);}
 
 while: WHILE {printf("label%d:  \n", labelCount); labelStack[labelPtr++] = labelCount++;}  
 
