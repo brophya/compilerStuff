@@ -20,13 +20,14 @@ int operand2;
 int labelStack[50]; 
 int labelPtr = 0; 
 int labelCount = 0;
+int ifFlag;
 char* compOp;
 %}
 
 
 %token DO WHILE ENDWHILE IF ENDIF THEN ELSE ID NUM LT GT LE
 %token GE ASSIGN EQ NEQ PLUS MINUS MUL DIV SEMI JUNK RETURN GOTO COLON
-%token OPAREN CPAREN OBRACE CBRACE QM INT CHAR FOR COMMA SGQT
+%token OPAREN CPAREN OBRACE CBRACE QM INT CHAR FOR COMMA SGQT IFELSE
 %%
 
 prog:   stmts
@@ -74,27 +75,40 @@ condition: expression op expression {operand2 = regVals[regPtr - 1]; operand1 = 
                                     printf("%s $%d, $%d, endLabel%d\n",compOp, operand1, operand2, labelStack[labelPtr - 1]);}
 
 condition2:expression op expression {operand2 = regVals[regPtr - 1]; operand1 = regVals[regPtr - 2]; 
-                          printf("%s $%d, $%d, endLabel%d\n",compOp, operand1, operand2, labelStack[labelPtr++] = labelCount++);}
+                          if(ifFlag == 0) {printf("%s $%d, $%d, ifLabel%d\n",compOp, operand1, operand2, labelStack[labelPtr++] = labelCount++);} 
+                          else{ labelStack[labelPtr++] = labelCount++; labelStack[labelPtr++] = labelCount++;
+                          printf("%s $%d, $%d, ifLabel%d\n",compOp, operand1, operand2, labelStack[labelPtr - 2]);}}         
+                 
 
-op:	LT      {compOp = "bge";} 
+condition4:
+
+
+op:     LT      {compOp = "bge";}
         | GT    {compOp = "ble";}
         | LE    {compOp = "bgt";}
         | GE    {compOp = "blt";}
         | EQ    {compOp = "bne";}
         | NEQ   {compOp = "beq";}
 
-if:     IF OPAREN condition2 CPAREN OBRACE stmts CBRACE {printf("endLabel%d: \n",labelStack[labelPtr-1]);}
+if:     ifCond OPAREN condition2 CPAREN OBRACE stmts CBRACE {printf("ifLabel%d: \n",labelStack[labelPtr-1]); labelPtr--;}
 
-ifElse: IF OPAREN condition2 CPAREN OBRACE stmts CBRACE else OBRACE stmts CBRACE {printf("endIf%d: \n",labelStack[labelPtr-1]);}
+ifCond: IF {ifFlag = 0;}
 
-else: ELSE {printf("j endIf%d \n",labelStack[labelPtr-1]); printf("endLabel%d: \n",labelStack[labelPtr-1]);}
+ifElse: ifElseCond OPAREN condition2 CPAREN OBRACE stmts CBRACE else OBRACE stmts CBRACE {printf("ifLabel%d: \n",labelStack[labelPtr-1]);
+                                                                                  labelPtr = labelPtr - 2; ifFlag = 0;}
+ifElseCond: IFELSE {ifFlag = 1;}
+
+else: ELSE {printf("j ifLabel%d \n",labelStack[labelPtr-1]); printf("ifLabel%d: \n",labelStack[labelPtr-2]);}
+
 
 whileStatement: while OPAREN condition CPAREN OBRACE stmts CBRACE  {labelPtr--; 
                                                  printf("j label%d\n endLabel%d:  \n", labelStack[labelPtr], labelStack[labelPtr]);}
 
+
+
 while: WHILE {printf("label%d:  \n", labelCount); labelStack[labelPtr++] = labelCount++;}  
 
-forStatement: FOR OPAREN assignment QM condition QM assignment CPAREN OBRACE stmts CBRACE 
+forStatement: FOR OPAREN assignment QM condition4 QM assignment CPAREN OBRACE stmts CBRACE 
 
 
 %%

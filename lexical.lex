@@ -13,9 +13,8 @@ extern char* varType;
 
 "do"                    return DO;
 "while"                 return WHILE;
-"endwhile"              return ENDWHILE;
 "if"                    return IF;
-"endif"                 return ENDIF;
+"ifelse"                return IFELSE;
 "then"                  return THEN;
 "else"                  return ELSE;
 "goto"			return GOTO;
