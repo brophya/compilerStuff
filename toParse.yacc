@@ -70,9 +70,11 @@ factor:  OPAREN expression CPAREN
 type:  INT      {varType = "int" ;} 
         | CHAR  {varType = "char" ;}
 
-condition: expression op expression {operand2 = regVals[regPtr - 1]; operand1 = regVals[regPtr - 2]; printf("%s $%d, $%d, endLabel%d\n",compOp, operand1, operand2, labelStack[labelPtr - 1]);}
+condition: expression op expression {operand2 = regVals[regPtr - 1]; operand1 = regVals[regPtr - 2]; 
+                                    printf("%s $%d, $%d, endLabel%d\n",compOp, operand1, operand2, labelStack[labelPtr - 1]);}
 
-condition2: expression op expression {operand2 = regVals[regPtr - 1]; operand1 = regVals[regPtr - 2]; printf("%s $%d, $%d, endLabel%d\n",compOp, operand1, operand2, labelStack[labelPtr++] = labelCount++);}
+condition2:expression op expression {operand2 = regVals[regPtr - 1]; operand1 = regVals[regPtr - 2]; 
+                          printf("%s $%d, $%d, endLabel%d\n",compOp, operand1, operand2, labelStack[labelPtr++] = labelCount++);}
 
 op:	LT      {compOp = "bge";} 
         | GT    {compOp = "ble";}
