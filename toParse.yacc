@@ -45,8 +45,8 @@ stmt:   assignment QM
         | whileStatement 
         | forStatement
 
-assignment: varID ASSIGN expression	    { printf("sw $%d, %s\n", reg-1, assignID);}
-            | declaration ASSIGN expression { printf("sw $%d, %s\n", reg-1, declareID);}
+assignment: varID ASSIGN expression	    { printf("sw $%d, %s\n", reg-1, assignID); regPtr = 0; reg = 8;}
+            | declaration ASSIGN expression { printf("sw $%d, %s\n", reg-1, declareID); regPtr = 0; reg = 8;}
 
 varID: ID {assignID = strdup(identifier); if (lookUp(identifier) == NULL) yyerror("use of undeclared variable"); }
 
