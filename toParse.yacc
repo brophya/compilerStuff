@@ -111,9 +111,9 @@ while: WHILE {printf("label%d:  \n", labelCount); labelStack[labelPtr++] = label
 
 forStatement: FOR OPAREN assignment QM condition4 QM assignment CPAREN OBRACE stmts CBRACE 
 
-printStatement: PRINTINT OPAREN NUM CPAREN     {printf("li $v0, 1\n"); printf("li $a0, %d\n", numVal); printf("syscall\n");}
+printStatement: PRINTINT OPAREN NUM CPAREN     {printf("li $2, 1\n"); printf("li $4, %d\n", numVal); printf("syscall\n");}
                 | PRINTINT OPAREN varID CPAREN {if (strcmp((lookUp(assignID)->type),"int") != 0) yyerror("invalid parameter for printInt");
-                                               else printf("li $v0, 1\n"); printf("lw $a0, %s\n", assignID); printf("syscall\n");}  
+                                               else printf("li $2, 1\n"); printf("lw $4, %s\n", assignID); printf("syscall\n");}  
                  
 
 
