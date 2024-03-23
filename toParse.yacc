@@ -27,7 +27,7 @@ char* compOp;
 
 %token DO WHILE ENDWHILE IF ENDIF THEN ELSE ID NUM LT GT LE
 %token GE ASSIGN EQ NEQ PLUS MINUS MUL DIV SEMI JUNK RETURN GOTO COLON
-%token OPAREN CPAREN OBRACE CBRACE QM INT CHAR FOR COMMA SGQT IFELSE
+%token OPAREN CPAREN OBRACE CBRACE QM INT CHAR FOR COMMA SGQT IFELSE PRINTINT
 %%
 
 prog:   stmts
@@ -44,6 +44,7 @@ stmt:   assignment QM
 	| if
         | whileStatement 
         | forStatement
+        | printStatement QM
 
 assignment: varID ASSIGN expression	    { printf("sw $%d, %s\n", reg-1, assignID); regPtr = 0; reg = 8;}
             | declaration ASSIGN expression { printf("sw $%d, %s\n", reg-1, declareID); regPtr = 0; reg = 8;}
@@ -109,6 +110,11 @@ whileStatement: while OPAREN condition CPAREN OBRACE stmts CBRACE  {labelPtr--;
 while: WHILE {printf("label%d:  \n", labelCount); labelStack[labelPtr++] = labelCount++;}  
 
 forStatement: FOR OPAREN assignment QM condition4 QM assignment CPAREN OBRACE stmts CBRACE 
+
+printStatement: PRINTINT OPAREN NUM CPAREN     {printf("li $v0, 1\n"); printf("li $a0, %d\n", numVal); printf("syscall\n");}
+                | PRINTINT OPAREN varID CPAREN {if (strcmp((lookUp(assignID)->type),"int") != 0) yyerror("invalid parameter for printInt");
+                                               else printf("li $v0, 1\n"); printf("lw $a0, %s\n", assignID); printf("syscall\n");}  
+                 
 
 
 %%
