@@ -10,7 +10,8 @@ extern char* varType;
 %}
 
 %%
-"printInt"              return PRINTINT;
+"getInteger"            return GETINTEGER;
+"putInteger"            return PUTINTEGER;
 "do"                    return DO;
 "while"                 return WHILE;
 "if"                    return IF;

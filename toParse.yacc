@@ -27,7 +27,7 @@ char* compOp;
 
 %token DO WHILE ENDWHILE IF ENDIF THEN ELSE ID NUM LT GT LE
 %token GE ASSIGN EQ NEQ PLUS MINUS MUL DIV SEMI JUNK RETURN GOTO COLON
-%token OPAREN CPAREN OBRACE CBRACE QM INT CHAR FOR COMMA SGQT IFELSE PRINTINT
+%token OPAREN CPAREN OBRACE CBRACE QM INT CHAR FOR COMMA SGQT IFELSE PUTINTEGER GETINTEGER
 %%
 
 prog:   stmts
@@ -68,6 +68,7 @@ term:      term MUL factor   {operand2 = regVals[--regPtr]; operand1 = regVals[-
 factor:  OPAREN expression CPAREN   
 	| NUM  {printf("li $%d, %d\n", reg, numVal); regVals[regPtr++] = reg++; }  
 	| ID   {printf("lw $%d, %s\n", reg, identifier); regVals[regPtr++] = reg++; } 
+        | getIntegerFunct {printf("move $%d, $2\n", reg); regVals[regPtr++] = reg++; }
 
 type:  INT      {varType = "int" ;} 
         | CHAR  {varType = "char" ;}
@@ -105,16 +106,15 @@ else: ELSE {printf("j ifLabel%d \n",labelStack[labelPtr-1]); printf("ifLabel%d: 
 whileStatement: while OPAREN condition CPAREN OBRACE stmts CBRACE  {labelPtr--; 
                                                  printf("j label%d\n endLabel%d:  \n", labelStack[labelPtr], labelStack[labelPtr]);}
 
-
-
 while: WHILE {printf("label%d:  \n", labelCount); labelStack[labelPtr++] = labelCount++;}  
 
 forStatement: FOR OPAREN assignment QM condition4 QM assignment CPAREN OBRACE stmts CBRACE 
 
-printStatement: PRINTINT OPAREN NUM CPAREN     {printf("li $2, 1\n"); printf("li $4, %d\n", numVal); printf("syscall\n");}
-                | PRINTINT OPAREN varID CPAREN {if (strcmp((lookUp(assignID)->type),"int") != 0) yyerror("invalid parameter for printInt");
+printStatement: PUTINTEGER OPAREN NUM CPAREN     {printf("li $2, 1\n"); printf("li $4, %d\n", numVal); printf("syscall\n");}
+                | PUTINTEGER OPAREN varID CPAREN {if (strcmp((lookUp(assignID)->type),"int") != 0) yyerror("invalid parameter for putInt");
                                                else printf("li $2, 1\n"); printf("lw $4, %s\n", assignID); printf("syscall\n");}  
-                 
+
+getIntegerFunct:   GETINTEGER OPAREN CPAREN {printf("li $2, 5\nsyscall\n");}
 
 
 %%
