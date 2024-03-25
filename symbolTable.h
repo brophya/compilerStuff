@@ -3,9 +3,14 @@
 #include<stdlib.h>
 #define HASHSIZE 101
 
+unsigned int baseVal = 268500992; 
+unsigned int nextWord = 0; 
+
+
 typedef struct Var{
     char* name; 
     char* type; 
+    unsigned int memAdd; 
     struct Var* nextEntry;
 } var_t;
 
@@ -35,12 +40,13 @@ var_t * lookUp(char* varName){
 var_t *install(char*name, char*type){
     
     var_t * np;
-    unsigned int hashVal;
-    
+    unsigned int hashVal;     
     if((np = lookUp(name)) == NULL){
         np = (var_t*) malloc(sizeof(*np));
         if( np == NULL || (np->name = strdup(name))== NULL)
             return NULL; 
+        np->memAdd = baseVal + nextWord;
+        nextWord += 4;  
         hashVal = hash(name);
         np->nextEntry = hashTable[hashVal]; 
         hashTable[hashVal] = np; 
@@ -54,4 +60,11 @@ var_t *install(char*name, char*type){
     return np; 
 }
 
+unsigned int getAdd(char* varName){
 
+    var_t* np; 
+     for (np = hashTable[hash(varName)]; np!= NULL; np = np->nextEntry)
+        if(!strcmp(varName,np->name))
+            return np->memAdd;
+
+}

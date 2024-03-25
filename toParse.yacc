@@ -46,8 +46,8 @@ stmt:   assignment QM
         | forStatement
         | printStatement QM
 
-assignment: varID ASSIGN expression	    { printf("sw $%d, %s\n", reg-1, assignID); regPtr = 0; reg = 8;}
-            | declaration ASSIGN expression { printf("sw $%d, %s\n", reg-1, declareID); regPtr = 0; reg = 8;}
+assignment: varID ASSIGN expression	    { printf("sw $%d, %d\n", reg-1, getAdd(assignID)); regPtr = 0; reg = 8;}
+            | declaration ASSIGN expression { printf("sw $%d, %d\n", reg-1, getAdd(declareID)); regPtr = 0; reg = 8;}
 
 varID: ID {assignID = strdup(identifier); if (lookUp(identifier) == NULL) yyerror("use of undeclared variable"); }
 
@@ -67,7 +67,7 @@ term:      term MUL factor   {operand2 = regVals[--regPtr]; operand1 = regVals[-
 
 factor:  OPAREN expression CPAREN   
 	| NUM  {printf("li $%d, %d\n", reg, numVal); regVals[regPtr++] = reg++; }  
-	| ID   {printf("lw $%d, %s\n", reg, identifier); regVals[regPtr++] = reg++; } 
+	| ID   {printf("lw $%d, %d\n", reg, getAdd(identifier)); regVals[regPtr++] = reg++; } 
         | getIntegerFunct {printf("move $%d, $2\n", reg); regVals[regPtr++] = reg++; }
 
 type:  INT      {varType = "int" ;} 
@@ -112,7 +112,7 @@ forStatement: FOR OPAREN assignment QM condition4 QM assignment CPAREN OBRACE st
 
 printStatement: PUTINTEGER OPAREN NUM CPAREN     {printf("li $2, 1\n"); printf("li $4, %d\n", numVal); printf("syscall\n");}
                 | PUTINTEGER OPAREN varID CPAREN {if (strcmp((lookUp(assignID)->type),"int") != 0) yyerror("invalid parameter for putInt");
-                                               else printf("li $2, 1\n"); printf("lw $4, %s\n", assignID); printf("syscall\n");}  
+                                               else printf("li $2, 1\n"); printf("lw $4, %d\n", getAdd(assignID)); printf("syscall\n");}  
 
 getIntegerFunct:   GETINTEGER OPAREN CPAREN {printf("li $2, 5\nsyscall\n");}
 
