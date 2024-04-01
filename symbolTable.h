@@ -12,6 +12,7 @@ typedef struct Var{
     char* type; 
     unsigned int memAdd; 
     struct Var* nextEntry;
+    int currReg;
 } var_t;
 
 
@@ -46,7 +47,8 @@ var_t *install(char*name, char*type){
         if( np == NULL || (np->name = strdup(name))== NULL)
             return NULL; 
         np->memAdd = baseVal + nextWord;
-        nextWord += 4;  
+        nextWord += 4;
+        np->currReg = -1;  
         hashVal = hash(name);
         np->nextEntry = hashTable[hashVal]; 
         hashTable[hashVal] = np; 
@@ -68,3 +70,20 @@ unsigned int getAdd(char* varName){
             return np->memAdd;
 
 }
+int getReg(char* varName){
+	var_t* np;
+     for (np = hashTable[hash(varName)]; np!= NULL; np = np->nextEntry)
+        if(!strcmp(varName,np->name))
+            return np->currReg;
+}
+int setReg(char* varName, int regio){
+    var_t* np;
+    for (np = hashTable[hash(varName)]; np!= NULL; np = np->nextEntry)
+        if(!strcmp(varName,np->name)){
+            np->currReg = regio;
+	    return 1;
+        }
+   return 0;
+
+}
+
