@@ -12,6 +12,7 @@ char* identifier;
 char* varType;
 char* assignID;
 char* declareID;
+char* expressionID;
 int tempVal;
 int regVals[32]; //this will be used really only if we have too many operands in an expressio
 int regPtr = 0;
@@ -46,8 +47,8 @@ stmt:   assignment QM
         | forStatement
         | printStatement QM
 
-assignment: varID ASSIGN expression	    { printf("sw $%d, %d\n", reg-1, getAdd(assignID)); regPtr = 0; reg = 8;}
-            | declaration ASSIGN expression { printf("sw $%d, %d\n", reg-1, getAdd(declareID)); regPtr = 0; reg = 8;}
+assignment: varID ASSIGN expression	    { if(getReg(assignID) != -1){printf("move $%d, $%d\n", getReg(assignID), regVals[--regPtr] );regPtr--;} else {printf("sw $%d, %d\n", reg-1, getAdd(assignID)); setReg(assignID, reg-1);} }
+            | declaration ASSIGN expression { printf("sw $%d, %d\n", reg-1, getAdd(declareID)); setReg(declareID, reg - 1);}
 
 varID: ID {assignID = strdup(identifier); if (lookUp(identifier) == NULL) yyerror("use of undeclared variable"); }
 
@@ -67,8 +68,10 @@ term:      term MUL factor   {operand2 = regVals[--regPtr]; operand1 = regVals[-
 
 factor:  OPAREN expression CPAREN   
 	| NUM  {printf("li $%d, %d\n", reg, numVal); regVals[regPtr++] = reg++; }  
-	| ID   {printf("lw $%d, %d\n", reg, getAdd(identifier)); regVals[regPtr++] = reg++; } 
+	| expressID   {if(getReg(expressionID) == -1) {printf("lw $%d, %d\n", reg, getAdd(identifier)); regVals[regPtr++] = reg++;}else regVals[regPtr++] = getReg(expressionID); } 
         | getIntegerFunct {printf("move $%d, $2\n", reg); regVals[regPtr++] = reg++; }
+
+expressID: ID {expressionID = strdup(identifier); if(lookUp(identifier) == NULL) yyerror("use of undeclared variable"); }
 
 type:  INT      {varType = "int" ;} 
         | CHAR  {varType = "char" ;}
