@@ -1,0 +1,11 @@
+int x1 = 0?
+int y1 = 10?
+int x2 = 10?
+int y2 = 0?
+int area?
+int slope?
+
+
+area = (x2 - x1) * (y1 - y2)?
+
+putInteger(area)?
