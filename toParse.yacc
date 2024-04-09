@@ -1,3 +1,4 @@
+
 %{	
 #include "symbolTable.h"
 #include <stdio.h>
@@ -8,6 +9,7 @@ int lineCount = 0;
 extern char* yytext;
 int numVal;
 int reg = 8;
+int expL = 0;
 char* identifier;
 char* varType;
 char* assignID;
@@ -47,8 +49,8 @@ stmt:   assignment QM
         | forStatement
         | printStatement QM
 
-assignment: varID ASSIGN expression	    { if(getReg(assignID) != -1){printf("move $%d, $%d\n", getReg(assignID), regVals[--regPtr] );regPtr--;reg--;} else {printf("sw $%d, %d\n", reg-1, getAdd(assignID)); setReg(assignID, reg-1);} }
-            | declaration ASSIGN expression { printf("sw $%d, %d\n", reg-1, getAdd(declareID)); setReg(declareID, reg - 1);}
+assignment: varID ASSIGN expression	    { if(getReg(assignID) != -1){printf("move $%d, $%d\n", getReg(assignID), regVals[--regPtr] );regPtr = regPtr - 1 - expL ;reg = reg - expL; expL = 0;} else {printf("move $%d, $%d\n", reg - expL, reg - 1); regPtr = regPtr - expL; reg = reg - expL; expL = 0;printf("sw $%d, %d\n", reg, getAdd(assignID)); setReg(assignID, reg); regVals[regPtr++] = reg++;} }
+            | declaration ASSIGN expression { regPtr = regPtr - 1 - expL ;reg = reg - 1 - expL; expL = 0;printf("sw $%d, %d\n", reg, getAdd(declareID)); setReg(declareID, reg); regVals[regPtr++] = reg++;}
 
 varID: ID {assignID = strdup(identifier); if (lookUp(identifier) == NULL) yyerror("use of undeclared variable"); }
 
@@ -58,16 +60,16 @@ gotoStatement: GOTO ID
 
 labeledStatement: ID COLON stmt
 
-expression : expression PLUS term   {operand2 = regVals[--regPtr]; operand1 = regVals[--regPtr]; regVals[regPtr] = reg++; printf("add $%d, $%d, $%d\n", regVals[regPtr++], operand1, operand2);}
-             | expression MINUS term {operand2 = regVals[--regPtr]; operand1 = regVals[--regPtr]; regVals[regPtr] = reg++; printf("sub $%d, $%d, $%d\n", regVals[regPtr++], operand1, operand2);}
+expression : expression PLUS term   {operand2 = regVals[--regPtr]; operand1 = regVals[--regPtr]; regVals[regPtr] = reg++; printf("add $%d, $%d, $%d\n", regVals[regPtr++], operand1, operand2);expL++;}
+             | expression MINUS term {operand2 = regVals[--regPtr]; operand1 = regVals[--regPtr]; regVals[regPtr] = reg++; printf("sub $%d, $%d, $%d\n", regVals[regPtr++], operand1, operand2);expL++;}
              | term
 
-term:      term MUL factor   {operand2 = regVals[--regPtr]; operand1 = regVals[--regPtr]; regVals[regPtr] = reg++; printf("mul $%d, $%d, $%d\n", regVals[regPtr++], operand1, operand2);}
-           | term DIV factor {operand2 = regVals[--regPtr]; operand1 = regVals[--regPtr]; regVals[regPtr] = reg++; printf("div $%d, $%d, $%d\n", regVals[regPtr++], operand1, operand2);}
+term:      term MUL factor   {operand2 = regVals[--regPtr]; operand1 = regVals[--regPtr]; regVals[regPtr] = reg++; printf("mul $%d, $%d, $%d\n", regVals[regPtr++], operand1, operand2);expL++;}
+           | term DIV factor {operand2 = regVals[--regPtr]; operand1 = regVals[--regPtr]; regVals[regPtr] = reg++; printf("div $%d, $%d, $%d\n", regVals[regPtr++], operand1, operand2); expL++;}
            | factor 
 
 factor:  OPAREN expression CPAREN   
-	| NUM  {printf("li $%d, %d\n", reg, numVal); regVals[regPtr++] = reg++; }  
+	| NUM  { printf("li $%d, %d\n", reg, numVal); regVals[regPtr++] = reg++;}  
 	| expressID   {if(getReg(expressionID) == -1) {printf("lw $%d, %d\n", reg, getAdd(identifier)); regVals[regPtr++] = reg++;}else regVals[regPtr++] = getReg(expressionID); } 
         | getIntegerFunct {printf("move $%d, $2\n", reg); regVals[regPtr++] = reg++; }
 
