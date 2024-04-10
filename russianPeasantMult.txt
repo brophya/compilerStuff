@@ -1,0 +1,12 @@
+int a = getInteger()?
+int b = getInteger()?
+int result = 0?
+while (b > 0){
+   if( ((b/2)*2) != b){
+      result = result + a? 
+     }
+     a = a * 2?
+     b = b / 2?
+}
+putInteger(result)?
+
