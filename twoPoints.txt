@@ -1,0 +1,22 @@
+int x1 = getInteger()?
+int y1 = getInteger()?
+int x2 = getInteger()?
+int y2 = getInteger()?
+int area?
+int slope? 
+
+area = (x2 - x1) * (y2 - y1)?
+
+if (area < 0){
+
+area = area - (2 * area)? 
+
+
+}
+
+
+slope = (y2 - y1) / (x2 - x1)? 
+
+
+putInteger(area)?
+putInteger(slope)?

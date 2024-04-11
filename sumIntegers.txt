@@ -1,0 +1,13 @@
+int initial = getInteger()?
+int final = getInteger()? 
+int sum? 
+
+while (initial <= final){
+
+     sum = sum + initial?
+     initial = initial + 1? 
+
+}
+
+putInteger(sum)?
+
