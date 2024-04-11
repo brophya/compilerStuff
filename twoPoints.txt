@@ -9,7 +9,7 @@ area = (x2 - x1) * (y2 - y1)?
 
 if (area < 0){
 
-area = area - (2 * area)? 
+area = area * -1?
 
 
 }
